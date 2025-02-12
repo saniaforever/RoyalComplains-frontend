@@ -1,6 +1,6 @@
-let BASE_URL = "https://royalcomplains-backend.onrender.com/";
-if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-  BASE_URL = "http://localhost:4000/";
-}
+const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:4000"
+    : "https://royalcomplains-backend.onrender.com";
 
 export { BASE_URL };

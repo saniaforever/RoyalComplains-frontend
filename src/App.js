@@ -1,19 +1,9 @@
 import "@mui/material";
 import "react-icons";
-import "react-icons/bi";
-import "react-icons/md";
-import "react-icons/bs";
-import "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import theme from "./theme";
 
 import PostView from "./components/views/PostView";
@@ -25,13 +15,25 @@ import ExploreView from "./components/views/ExploreView";
 import PrivateRoute from "./components/PrivateRoute";
 import SearchView from "./components/views/SearchView";
 import MessengerView from "./components/views/MessengerView";
-import { initiateSocketConnection, socket } from "./helpers/socketHelper";
+
 import { useEffect } from "react";
 import { BASE_URL } from "./config";
 import { io } from "socket.io-client";
 
+// Initialize WebSocket Connection to Backend
+const socket = io(BASE_URL, { transports: ["websocket"] });
+
 function App() {
-  initiateSocketConnection();
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("🔗 Connected to WebSocket Server");
+    });
+
+    return () => {
+      socket.disconnect();
+      console.log("❌ Disconnected from WebSocket Server");
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
